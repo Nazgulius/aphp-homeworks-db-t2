@@ -7,8 +7,16 @@ try {
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
   // создание таблицы 
-  $sqlCreate = "CREATE TABLE IF NOT EXISTS shop (name VARCHAR(100), address TEXT,  UNIQUE (name))";
+  $sqlCreate = "CREATE TABLE IF NOT EXISTS shop (
+    id INT AUTO_INCREMENT PRIMARY KEY, 
+    name VARCHAR(100), 
+    address TEXT,  
+    UNIQUE (name))";
   $pdo->exec($sqlCreate);
+
+  // обнуление AUTO_INCREMENT id = 1 
+  $sqlIncrementAuto = "ALTER TABLE shop AUTO_INCREMENT = 1";    
+  $pdo->exec($sqlIncrementAuto);
   
   // добавление элементов в таблицу
   $sqlInsert = "INSERT INTO  shop (name, address) VALUES ('Lenta', 'Moscow') 
@@ -34,8 +42,9 @@ try {
 
   // Вывод данных
   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-      echo "name: " . $row['name'] . "; ";
-      echo "address: " . $row['address'] . "; " . PHP_EOL;
+    echo "id: " . $row['id'] . "; ";
+    echo "name: " . $row['name'] . "; ";
+    echo "address: " . $row['address'] . "; " . PHP_EOL;
   }
 } catch (PDOException $e) {
   echo "Ошибка: " . $e->getMessage();
@@ -49,8 +58,16 @@ try {
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
   // создание таблицы 
-  $sqlCreate = "CREATE TABLE IF NOT EXISTS client (name VARCHAR(100), phone TEXT,  UNIQUE (name))";
+  $sqlCreate = "CREATE TABLE IF NOT EXISTS client (
+    id INT AUTO_INCREMENT PRIMARY KEY, 
+    name VARCHAR(100), 
+    phone TEXT,  
+    UNIQUE (name))";
   $pdo->exec($sqlCreate);
+
+  // обнуление AUTO_INCREMENT id = 1 
+  $sqlIncrementAuto = "ALTER TABLE client AUTO_INCREMENT = 1";    
+  $pdo->exec($sqlIncrementAuto);
   
   // добавление элементов в таблицу
   $sqlInsert = "INSERT INTO  client (name, phone) VALUES ('Thomas', '+79991118855') 
@@ -76,8 +93,9 @@ try {
 
   // Вывод данных
   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-      echo "name: " . $row['name'] . "; ";
-      echo "phone: " . $row['phone'] . "; " . PHP_EOL;
+    echo "id: " . $row['id'] . "; ";
+    echo "name: " . $row['name'] . "; ";
+    echo "phone: " . $row['phone'] . "; " . PHP_EOL;
   }
 } catch (PDOException $e) {
   echo "Ошибка: " . $e->getMessage();
@@ -92,8 +110,17 @@ try {
 
 
   // создание таблицы 
-  $sqlCreate = "CREATE TABLE IF NOT EXISTS product (name VARCHAR(100), price INT, count INT,  UNIQUE (name))";
+  $sqlCreate = "CREATE TABLE IF NOT EXISTS product (
+    id INT AUTO_INCREMENT PRIMARY KEY, 
+    name VARCHAR(100), 
+    price INT, 
+    count INT,  
+    UNIQUE (name))";
   $pdo->exec($sqlCreate);
+
+  // обнуление AUTO_INCREMENT id = 1 
+  $sqlIncrementAuto = "ALTER TABLE product AUTO_INCREMENT = 1";    
+  $pdo->exec($sqlIncrementAuto);
   
   // добавление элементов в таблицу
   $sqlInsert = "INSERT INTO  product (name, price, count) VALUES ('apple', 50, 100) 
@@ -119,9 +146,10 @@ try {
 
   // Вывод данных
   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-      echo "name: " . $row['name'] . "; ";
-      echo "price: " . $row['price'] . "; ";
-      echo "count: " . $row['count'] . "; " . PHP_EOL;
+    echo "id: " . $row['id'] . "; ";
+    echo "name: " . $row['name'] . "; ";
+    echo "price: " . $row['price'] . "; ";
+    echo "count: " . $row['count'] . "; " . PHP_EOL;
   }
 } catch (PDOException $e) {
   echo "Ошибка: " . $e->getMessage();
@@ -172,10 +200,10 @@ try {
 
   // Вывод данных
   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-      echo "id: " . $row['id'] . "; ";
-      echo "created_at: " . $row['created_at'] . "; ";
-      echo "seller: " . $row['seller'] . "; ";
-      echo "buyer: " . $row['buyer'] . "; " . PHP_EOL;
+    echo "id: " . $row['id'] . "; ";
+    echo "created_at: " . $row['created_at'] . "; ";
+    echo "seller: " . $row['seller'] . "; ";
+    echo "buyer: " . $row['buyer'] . "; " . PHP_EOL;
   }
 } catch (PDOException $e) {
   echo "Ошибка: " . $e->getMessage();
@@ -191,6 +219,7 @@ try {
 
   // создание таблицы 
   $sqlCreate = "CREATE TABLE IF NOT EXISTS order_product (
+    id INT AUTO_INCREMENT PRIMARY KEY, 
     name VARCHAR(100), 
     price INT, 
     count INT,
@@ -203,6 +232,10 @@ try {
   // удаляем лишнии записи
   $sql = "DELETE FROM order_product";
   $pdo->exec($sql);
+
+  // обнуление AUTO_INCREMENT id = 1 
+  $sqlIncrementAuto = "ALTER TABLE order_product AUTO_INCREMENT = 1";    
+  $pdo->exec($sqlIncrementAuto);
   
   // добавление элементов в таблицу
   $sqlInsert = "INSERT INTO  order_product (name, price, count, created_at, seller, buyer) 
@@ -233,6 +266,7 @@ try {
 
   // Вывод данных
   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    echo "id: " . $row['id'] . "; ";
     echo "name: " . $row['name'] . "; ";
     echo "price: " . $row['price'] . "; ";
     echo "count: " . $row['count'] . "; ";
