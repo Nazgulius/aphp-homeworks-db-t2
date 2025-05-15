@@ -226,7 +226,14 @@ try {
     created_at DATE, 
     seller VARCHAR(100), 
     buyer VARCHAR(100),
-    UNIQUE (name))";
+    UNIQUE (name),
+    FOREIGN KEY (name) REFERENCES product(name),
+    FOREIGN KEY (price) REFERENCES product(price),
+    FOREIGN KEY (count) REFERENCES product(count),
+    FOREIGN KEY (created_at) REFERENCES order2(created_at),
+    FOREIGN KEY (seller) REFERENCES order2(seller),
+    FOREIGN KEY (buyer) REFERENCES order2(buyer)
+    )";
   $pdo->exec($sqlCreate);
 
   // удаляем лишнии записи
