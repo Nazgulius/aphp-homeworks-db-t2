@@ -102,7 +102,7 @@ try {
 }
 
 
-// создание и наполнение таблицы product:
+// создание и наполнение таблицы product
 try {
   // Подключение
   $pdo = new PDO("mysql:host=localhost;dbname=testBase", 'root', '12345');
@@ -173,13 +173,12 @@ try {
   $pdo->exec($sqlCreate);
 
   // удаляем лишнии записи
-  $sql = "DELETE FROM order2";
-  $pdo->exec($sql);
+  $pdo->exec("DELETE FROM order_product");
+  $pdo->exec("DELETE FROM order2");
 
   // обнуление AUTO_INCREMENT id = 1 
   $sqlIncrementAuto = "ALTER TABLE order2 AUTO_INCREMENT = 1";
   $pdo->exec($sqlIncrementAuto);
-
 
   // Запрос
   echo "База данных order2:" . PHP_EOL;
@@ -187,28 +186,28 @@ try {
   // Получение ID магазина по имени:
   $stmt = $pdo->prepare("SELECT id FROM shop WHERE name = ?");
   $stmt->execute(['Da']);
-  $shopId1 = $stmt->fetchColumn(); 
+  $shopId1 = $stmt->fetchColumn();
   $stmt->execute(['Lenta']);
-  $shopId2 = $stmt->fetchColumn(); 
+  $shopId2 = $stmt->fetchColumn();
   $stmt->execute(['Karusel']);
-  $shopId3 = $stmt->fetchColumn(); 
+  $shopId3 = $stmt->fetchColumn();
   $stmt->execute(['Streat']);
-  $shopId4 = $stmt->fetchColumn(); 
+  $shopId4 = $stmt->fetchColumn();
   $stmt->execute(['Bingo']);
-  $shopId5 = $stmt->fetchColumn(); 
+  $shopId5 = $stmt->fetchColumn();
 
   // Получение ID клиента по имени:
   $stmt = $pdo->prepare("SELECT id FROM client WHERE name = ?");
   $stmt->execute(['Thomas']);
-  $clientId1= $stmt->fetchColumn(); 
+  $clientId1 = $stmt->fetchColumn();
   $stmt->execute(['Anton']);
-  $clientId2 = $stmt->fetchColumn(); 
+  $clientId2 = $stmt->fetchColumn();
   $stmt->execute(['Otto']);
-  $clientId3 = $stmt->fetchColumn(); 
+  $clientId3 = $stmt->fetchColumn();
   $stmt->execute(['Kimi']);
-  $clientId4 = $stmt->fetchColumn(); 
+  $clientId4 = $stmt->fetchColumn();
   $stmt->execute(['Leonid']);
-  $clientId5 = $stmt->fetchColumn(); 
+  $clientId5 = $stmt->fetchColumn();
 
   $sqlInsertOrder = "INSERT INTO order2 (created_at, seller_id, buyer_id) VALUES ('2025-05-10', ?, ?)";
   $stmt = $pdo->prepare($sqlInsertOrder);
@@ -239,11 +238,11 @@ try {
   $stmt->execute();
   $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-  // Выводим или обрабатываем результат
+  // Выводим результат
   foreach ($orders as $order) {
-  echo "Заказ №" . $order['id'] . ": ";
-  echo "Магазин: " . $order['shop_name'] . ", " . $order['shop_address'] . "; ";
-  echo "Клиент: " . $order['client_name'] . ", " . $order['client_phone'] . PHP_EOL;
+    echo "Заказ №" . $order['id'] . ": ";
+    echo "Магазин: " . $order['shop_name'] . ", " . $order['shop_address'] . "; ";
+    echo "Клиент: " . $order['client_name'] . ", " . $order['client_phone'] . PHP_EOL;
   }
 } catch (PDOException $e) {
   echo "Ошибка: " . $e->getMessage();
@@ -256,26 +255,14 @@ try {
   $pdo = new PDO("mysql:host=localhost;dbname=testBase", 'root', '12345');
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-
   // создание таблицы 
   $sqlCreate = "CREATE TABLE IF NOT EXISTS order_product (
     id INT AUTO_INCREMENT PRIMARY KEY, 
-    -- name VARCHAR(100), 
-    -- price INT, 
-    -- count INT,
-    -- created_at DATE, 
-    -- seller VARCHAR(100), 
-    -- buyer VARCHAR(100),
     order_id INT,
     product_id INT,
-    -- UNIQUE (name),
     quantity INT,
     FOREIGN KEY (order_id) REFERENCES order2(id),
     FOREIGN KEY (product_id) REFERENCES product(id)
-    -- FOREIGN KEY (price) REFERENCES product(price),
-    -- FOREIGN KEY (count) REFERENCES product(count),
-    -- FOREIGN KEY (created_at) REFERENCES order2(created_at),
-    -- FOREIGN KEY (buyer) REFERENCES order2(buyer)
     )";
   $pdo->exec($sqlCreate);
 
@@ -287,58 +274,72 @@ try {
   $sqlIncrementAuto = "ALTER TABLE order_product AUTO_INCREMENT = 1";
   $pdo->exec($sqlIncrementAuto);
 
-  // // добавление элементов в таблицу
-  // $sqlInsert = "INSERT INTO  order_product (name, price, count, created_at, seller, buyer) 
-  //   VALUES ('apple', 50, 10, '2025-05-10', 'Da', 'Thomas') 
-  //   ON DUPLICATE KEY UPDATE name = 'apple'";  // наполнение
-  // $pdo->exec($sqlInsert); // запись
-  // $sqlInsert = "INSERT INTO  order_product (name, price, count, created_at, seller, buyer) 
-  //   VALUES ('pears', 60, 5, '2025-05-09', 'Lenta', 'Anton') 
-  //   ON DUPLICATE KEY UPDATE name = 'pears'";
-  // $pdo->exec($sqlInsert);
-  // $sqlInsert = "INSERT INTO  order_product (name, price, count, created_at, seller, buyer) 
-  //   VALUES ('bananas', 120, 50, '2025-05-09', 'Karusel', 'Otto') 
-  //   ON DUPLICATE KEY UPDATE name = 'bananas'";
-  // $pdo->exec($sqlInsert);
-  // $sqlInsert = "INSERT INTO  order_product (name, price, count, created_at, seller, buyer) 
-  //   VALUES ('grapes', 200, 15, '2025-05-10', 'Karusel', 'Kimi') 
-  //   ON DUPLICATE KEY UPDATE name = 'grapes'";
-  // $pdo->exec($sqlInsert);
-  // $sqlInsert = "INSERT INTO  order_product (name, price, count, created_at, seller, buyer) 
-  //   VALUES ('coconut', 400, 1, '2025-05-10', 'Bingo', 'Leonid') 
-  //   ON DUPLICATE KEY UPDATE name = 'coconut'";
-  // $pdo->exec($sqlInsert);
-
 
   // Запрос
   echo "База данных order_product:" . PHP_EOL;
 
-  // Получение id продукта по имени (например, 'apple'):
+  // Получение id продукта:
   $stmt = $pdo->prepare("SELECT id FROM product WHERE name = ?");
   $stmt->execute(['apple']);
-  $productId = $stmt->fetchColumn(); 
+  $productId1 = $stmt->fetchColumn();
+  $stmt->execute(['pears']);
+  $productId2 = $stmt->fetchColumn();
+  $stmt->execute(['bananas']);
+  $productId3 = $stmt->fetchColumn();
+  $stmt->execute(['grapes']);
+  $productId4 = $stmt->fetchColumn();
+  $stmt->execute(['coconut']);
+  $productId5 = $stmt->fetchColumn();
 
-  $lastOrderId = $pdo->lastInsertId();
+  // Получение ID order:
+  $stmt = $pdo->prepare("SELECT id FROM order2 WHERE id = ?");
+  $stmt->execute(['1']);
+  $order2Id1 = $stmt->fetchColumn();
+  $stmt->execute(['2']);
+  $order2Id2 = $stmt->fetchColumn();
+  $stmt->execute(['3']);
+  $order2Id3 = $stmt->fetchColumn();
+  $stmt->execute(['4']);
+  $order2Id4 = $stmt->fetchColumn();
+  $stmt->execute(['5']);
+  $order2Id5 = $stmt->fetchColumn();
+
 
   // Вставка позиции в заказ:
   $sqlInsertOrderProduct = "INSERT INTO order_product (order_id, product_id, quantity) VALUES (?, ?, ?)";
   $stmt = $pdo->prepare($sqlInsertOrderProduct);
-  $stmt->execute([$lastOrderId, $productId, 10]);
+  $stmt->execute([$order2Id1, $productId1, 10]);
+  $stmt->execute([$order2Id2, $productId2, 15]);
+  $stmt->execute([$order2Id3, $productId3, 50]);
+  $stmt->execute([$order2Id4, $productId4, 60]);
+  $stmt->execute([$order2Id5, $productId5, 2]);
+  $lastOrderId = $pdo->lastInsertId();
 
 
   // Вывод данных
   $stmt = $pdo->query("SELECT * FROM order_product");
   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     echo "id: " . $row['id'] . "; ";
-    // echo "name: " . $row['name'] . "; ";
-    // echo "price: " . $row['price'] . "; ";
-    // echo "count: " . $row['count'] . "; ";
-    // echo "created_at: " . $row['created_at'] . "; ";
-    // echo "seller: " . $row['seller'] . "; ";
-    // echo "buyer: " . $row['buyer'] . "; ";
     echo "order_id: " . $row['order_id'] . "; ";
     echo "product_id: " . $row['product_id'] . "; ";
     echo "quantity: " . $row['quantity'] . "; " . PHP_EOL;
+  }
+
+  // Получаем все заказы с деталями о ордере2 и продукте:
+  $sql = "SELECT op.*, o.created_at AS order2_created_at, p.name AS product_name, p.price AS product_price
+  FROM order_product op
+  LEFT JOIN order2 o ON op.order_id = o.id
+  LEFT JOIN product p ON op.product_id = p.id";
+
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute();
+  $ordersProduct = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+  // Выводим результат
+  foreach ($ordersProduct as $op) {
+    echo "Заказ №" . $op['id'] . ": ";
+    echo "Зада заказа: " . $op['order2_created_at'] . "; ";
+    echo "Продукт: " . $op['product_name'] . ", " . $op['product_price'] . PHP_EOL;
   }
 } catch (PDOException $e) {
   echo "Ошибка: " . $e->getMessage();
