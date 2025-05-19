@@ -187,16 +187,36 @@ try {
   // Получение ID магазина по имени:
   $stmt = $pdo->prepare("SELECT id FROM shop WHERE name = ?");
   $stmt->execute(['Da']);
-  $shopId = $stmt->fetchColumn(); // например, 3
+  $shopId1 = $stmt->fetchColumn(); 
+  $stmt->execute(['Lenta']);
+  $shopId2 = $stmt->fetchColumn(); 
+  $stmt->execute(['Karusel']);
+  $shopId3 = $stmt->fetchColumn(); 
+  $stmt->execute(['Streat']);
+  $shopId4 = $stmt->fetchColumn(); 
+  $stmt->execute(['Bingo']);
+  $shopId5 = $stmt->fetchColumn(); 
 
   // Получение ID клиента по имени:
   $stmt = $pdo->prepare("SELECT id FROM client WHERE name = ?");
   $stmt->execute(['Thomas']);
-  $clientId = $stmt->fetchColumn(); // например, 2
+  $clientId1= $stmt->fetchColumn(); 
+  $stmt->execute(['Anton']);
+  $clientId2 = $stmt->fetchColumn(); 
+  $stmt->execute(['Otto']);
+  $clientId3 = $stmt->fetchColumn(); 
+  $stmt->execute(['Kimi']);
+  $clientId4 = $stmt->fetchColumn(); 
+  $stmt->execute(['Leonid']);
+  $clientId5 = $stmt->fetchColumn(); 
 
   $sqlInsertOrder = "INSERT INTO order2 (created_at, seller_id, buyer_id) VALUES ('2025-05-10', ?, ?)";
   $stmt = $pdo->prepare($sqlInsertOrder);
-  $stmt->execute([$shopId, $clientId]);
+  $stmt->execute([$shopId1, $clientId1]);
+  $stmt->execute([$shopId2, $clientId2]);
+  $stmt->execute([$shopId3, $clientId3]);
+  $stmt->execute([$shopId4, $clientId4]);
+  $stmt->execute([$shopId5, $clientId5]);
   $lastOrderId = $pdo->lastInsertId();
 
 
@@ -296,7 +316,9 @@ try {
   // Получение id продукта по имени (например, 'apple'):
   $stmt = $pdo->prepare("SELECT id FROM product WHERE name = ?");
   $stmt->execute(['apple']);
-  $productId = $stmt->fetchColumn(); // например, 1
+  $productId = $stmt->fetchColumn(); 
+
+  $lastOrderId = $pdo->lastInsertId();
 
   // Вставка позиции в заказ:
   $sqlInsertOrderProduct = "INSERT INTO order_product (order_id, product_id, quantity) VALUES (?, ?, ?)";
